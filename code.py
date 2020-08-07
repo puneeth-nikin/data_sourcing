@@ -32,17 +32,19 @@ def source_daily(symbol):
         data.columns = ['Date', 'Open', 'High', 'Low', 'Close', 'Volume']
         data['Volume'] = 4
         data['Date'] = pd.to_datetime(data['Date'], format='%Y%m%d %H:%M')
-        data = data[['Date', 'Open', 'High', 'Low', 'Close', 'Volume']]
+        data['Date']=data['Date'].dt.strftime('%Y/%m/%d')
+        data = data[['Date', 'Open', 'High', 'Low', 'Close']]
         data.to_csv('symbols/'+symbol+'/daily/'+symbol+'_daily.csv',index=False)
 
 def combine_organise(symbol):
-    final_data=pd.DataFrame(columns=['Date','Open','High','Low','Close','Volume'])
+    final_data=pd.DataFrame(columns=['Date','sec','Open','High','Low','Close','Volume'])
     zip_path = 'unzipped_files/symbols/' + symbol + '/minute/' + 'data'
     df=pd.DataFrame(columns=['path','file'])
     for file in os.listdir(zip_path):
-        print(file)
+
         try:
             if file.endswith(".csv"):
+                print(file)
                 path=os.path.join(zip_path, file)
                 date=file[:8]
                 df=df.append({'path':path,'file':file},ignore_index=True)
@@ -50,17 +52,21 @@ def combine_organise(symbol):
 
                 data = data[range(0,6,1)]
                 data.columns=['sec','Open','High','Low','Close','Volume']
+
                 data['Date']=date
                 data['Volume']=4
-                data['Date']=pd.to_datetime(data['date'], format='%Y%m%d')+pd.to_timedelta(data['sec']/1000,unit='s')
-                data=data[['Date','Open','High','Low','Close','Volume']]
                 if data.shape[0]>2:
                     final_data=final_data.append(data)
 
         except:
             continue
+
+    final_data['Date']=pd.to_datetime(final_data['Date'], format='%Y%m%d')+pd.to_timedelta(final_data['sec']/1000,unit='s')
     final_data = final_data.sort_values(by='Date')
-    final_data.to_csv('symbols/'+symbol+'/minute/'+symbol+'_minute.csv',index=False)
+    final_data['Time']=final_data['Date'].dt.strftime('%H:%M')
+    final_data['Date'] = final_data['Date'].dt.strftime('%Y.%m.%d')
+    final_data=final_data[['Date','Time','Open','High','Low','Close','Volume']]
+    final_data.to_csv('symbols/'+symbol+'/minute/'+symbol+'_minute.csv',index=False,header=False)
     print(final_data)
 
 
@@ -83,3 +89,6 @@ def source(symbol):
 
 symbol= "AUDCHF"
 source(symbol)
+# combine_organise(symbol)
+
+#source_daily(symbol)
