@@ -103,7 +103,10 @@ def source(symbol):
         print("Directory ", dirName, " already exists")
 
     source_path='symbol_url/'+symbol+'/'+symbol+'_minute.csv'
+    print(source_path)
     source_links=pd.read_csv(source_path)
+
+
     for index,row in source_links.iterrows():
         try:
             download_url(row,symbol)
@@ -117,8 +120,8 @@ def source(symbol):
 
 
 
-symbol= "AUDCHF"
-source(symbol)
+# symbol= "AUDCHF"
+# source(symbol)
 # combine_organise(symbol)
 
 #source_daily(symbol)
