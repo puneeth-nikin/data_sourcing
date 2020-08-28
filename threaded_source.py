@@ -1,3 +1,3 @@
 import code
 
-code.source('USDZAR')
+code.source('USDSGD')

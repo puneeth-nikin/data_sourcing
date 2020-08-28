@@ -114,8 +114,8 @@ def source(symbol):
             time.sleep(5)
             continue
     combine_organise(symbol)
-    source_daily(symbol)
-    shutil.make_archive('zipfiles/' + symbol, 'zip', root_dir='symbols/'+symbol+'/')
+    #source_daily(symbol)
+    # shutil.make_archive('zipfiles/' + symbol, 'zip', root_dir='symbols/'+symbol+'/')
 
 
 
