@@ -125,5 +125,6 @@ def source(symbol):
 # combine_organise(symbol)
 
 #source_daily(symbol)
+shutil.make_archive('zipfiles/' + 'USDSGD', 'zip', root_dir='symbols/'+'USDSGD'+'/')
 
 
